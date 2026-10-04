@@ -4,7 +4,7 @@
 
 > All data stays on your device. No accounts. No servers. Zero telemetry.
 
-[![Website](https://img.shields.io/badge/website-curate-191919)](https://wushu75.github.io/curate/) ![Manifest V3](https://img.shields.io/badge/Manifest-V3-191919) ![Permissions](https://img.shields.io/badge/permissions-storage%20%2B%20medium.com-1a8917) ![Telemetry](https://img.shields.io/badge/telemetry-none-1a8917) ![Dependencies](https://img.shields.io/badge/dependencies-0-191919)
+[![Chrome Web Store](https://img.shields.io/badge/Chrome_Web_Store-Add_to_Chrome-1a8917)](https://chromewebstore.google.com/detail/curate/iacamcpominpmepkjlabdedmdbmifffg) [![Website](https://img.shields.io/badge/website-curate-191919)](https://wushu75.github.io/curate/) ![Manifest V3](https://img.shields.io/badge/Manifest-V3-191919) ![Permissions](https://img.shields.io/badge/permissions-storage%20%2B%20medium.com-1a8917) ![Telemetry](https://img.shields.io/badge/telemetry-none-1a8917) ![Dependencies](https://img.shields.io/badge/dependencies-0-191919)
 
 ---
 
@@ -56,7 +56,7 @@ Curate was designed so that there is nothing to leak:
 
 ### From the Chrome Web Store
 
-Coming soon — see [`store/chrome-web-store-listing.md`](store/chrome-web-store-listing.md).
+**[Install Curate from the Chrome Web Store](https://chromewebstore.google.com/detail/curate/iacamcpominpmepkjlabdedmdbmifffg)** — free, installs in seconds.
 
 ## How to use
 
@@ -142,7 +142,7 @@ Issues and pull requests are welcome at [github.com/wushu75/curate](https://gith
 
 - 🌐 [Website](https://wushu75.github.io/curate/)
 - 📦 [GitHub](https://github.com/wushu75/curate)
-- 🧩 Chrome Web Store — coming soon
+- 🧩 [Chrome Web Store](https://chromewebstore.google.com/detail/curate/iacamcpominpmepkjlabdedmdbmifffg)
 
 ## License
 
