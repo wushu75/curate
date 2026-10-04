@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — Curate</title>
+<meta name="description" content="Curate's privacy policy. All data stays on your device. No accounts, no servers, no analytics, no telemetry.">
+<link rel="canonical" href="https://wushu75.github.io/curate/privacy.html">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wushu75.github.io/curate/privacy.html">
+<meta property="og:title" content="Privacy Policy — Curate">
+<meta property="og:description" content="Curate's privacy policy. All data stays on your device. No accounts, no servers, no analytics, no telemetry.">
+<meta property="og:site_name" content="Curate">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --text: #242424;
+  --text-2: #6b6b6b;
+  --text-3: #8a8a8a;
+  --bg: #ffffff;
+  --bg-soft: #f9f9f9;
+  --border: #f2f2f2;
+  --border-2: #e6e6e6;
+  --black: #191919;
+  --green: #1a8917;
+  --green-soft: #e8f3e8;
+  --serif: 'Source Serif 4', Georgia, serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+body { font-family: var(--sans); color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+a { color: var(--text); }
+a:hover { color: #000; }
+.wrap { max-width: 1192px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+
+/* Nav */
+.nav { border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 50; }
+.nav-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; min-height: 57px; }
+.nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--black); }
+.nav-brand span { font-family: var(--serif); font-size: 26px; font-weight: 700; letter-spacing: -0.03em; }
+.nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; font-size: 14px; }
+.nav-links a { color: var(--text-2); text-decoration: none; padding: 12px 0; }
+.nav-links a:hover { color: var(--text); }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border-radius: 999px; background: var(--black); color: #fff; text-decoration: none; font-weight: 500; font-size: 14px; height: 38px; }
+.btn-primary:hover { background: #333; color: #fff; }
+.btn-green { background: var(--green); }
+.btn-green:hover { background: #158413; color: #fff; }
+
+/* Content */
+.privacy-hero { padding: 72px 0 40px; border-bottom: 1px solid var(--border); }
+.privacy-hero h1 { font-family: var(--serif); font-weight: 700; font-size: clamp(40px, 6vw, 64px); line-height: 1.05; letter-spacing: -0.03em; color: var(--black); }
+.privacy-hero p { margin-top: 16px; font-family: var(--serif); font-size: 21px; line-height: 1.55; color: var(--text-2); max-width: 640px; }
+.privacy-content { padding: 56px 0 96px; max-width: 720px; }
+.privacy-content h2 { font-family: var(--serif); font-size: 28px; font-weight: 700; letter-spacing: -0.015em; color: var(--black); margin-top: 48px; padding-top: 32px; border-top: 1px solid var(--border); }
+.privacy-content h2:first-child { margin-top: 0; padding-top: 0; border-top: 0; }
+.privacy-content p { margin-top: 14px; font-family: var(--serif); font-size: 18px; line-height: 1.7; color: #444; }
+.privacy-content ul { margin-top: 14px; padding-left: 0; list-style: none; }
+.privacy-content li { position: relative; padding: 6px 0 6px 28px; font-family: var(--serif); font-size: 18px; line-height: 1.65; color: #444; }
+.privacy-content li::before { content: ''; position: absolute; left: 0; top: 16px; width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+.privacy-content code { font-family: var(--mono); font-size: 15px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 4px; padding: 1px 6px; }
+.summary-box { margin-top: 20px; background: var(--green-soft); border: 1px solid #c8e0c8; border-radius: 8px; padding: 20px 24px; }
+.summary-box p { margin-top: 0; color: #2d5a2d; font-size: 17px; }
+.effective-date { margin-top: 12px; font-size: 14px; color: var(--text-3); }
+
+/* Footer */
+.footer { border-top: 1px solid var(--border); }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding: 32px 0 40px; font-size: 14px; color: var(--text-2); }
+
+@media (max-width: 640px) {
+  .nav-links a:not(.btn-primary) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<header class="nav">
+<nav class="wrap nav-inner" aria-label="Primary">
+  <a href="index.html" class="nav-brand">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M16.95 7.05a7 7 0 1 0 0 9.9"/><circle cx="19" cy="12" r="1.4" fill="#1a8917" stroke="none"/></svg>
+    <span>Curate</span>
+  </a>
+  <div class="nav-links">
+    <a href="index.html#issue">Features</a>
+    <a href="index.html#letters">Templates</a>
+    <a href="privacy.html" style="color: var(--text)">Privacy</a>
+    <a href="index.html#faq">FAQ</a>
+    <a href="https://chromewebstore.google.com/detail/curate/iacamcpominpmepkjlabdedmdbmifffg" class="btn-primary btn-green">Add to Chrome</a>
+  </div>
+</nav>
+</header>
+
+<!-- Hero -->
+<section class="wrap privacy-hero">
+  <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); margin-bottom: 16px">
+    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="10.5" width="13" height="9" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+    Privacy policy
+  </div>
+  <h1>Strictly off the record.</h1>
+  <p>An editor's notes are confidential by tradition. Curate keeps them that way by never having them to begin with.</p>
+  <div class="effective-date">Effective 1 October 2026</div>
+</section>
+
+<!-- Content -->
+<div class="wrap privacy-content">
+
+  <div class="summary-box">
+    <p>Curate stores everything locally in your browser. It makes no network requests, has no accounts, collects no analytics, and sends no telemetry. There is nothing to leak because there is nothing to collect.</p>
+  </div>
+
+  <h2>What Curate stores</h2>
+  <p>All data is kept in <code>chrome.storage.local</code> inside your browser profile on your device. This includes:</p>
+  <ul>
+    <li>Private notes you write about submissions</li>
+    <li>Decline and feedback templates you create or customise</li>
+    <li>Your settings (editor name, publication name, insert preferences)</li>
+    <li>Template usage counts (e.g. "Used 3x") for your own reference</li>
+  </ul>
+  <p>Nothing is sent to any server. Nothing is stored in the cloud. Nothing leaves your browser.</p>
+
+  <h2>What Curate does not collect</h2>
+  <ul>
+    <li>No personal information or identifiers</li>
+    <li>No browsing history or page content</li>
+    <li>No analytics, telemetry or crash reports</li>
+    <li>No cookies, fingerprinting or tracking pixels</li>
+    <li>No usage data of any kind sent anywhere</li>
+  </ul>
+
+  <h2>Network requests</h2>
+  <p>Curate makes <strong>zero network requests</strong>. The only <code>fetch()</code> call in the entire extension loads Curate's own bundled CSS file from inside the extension package. No data is ever transmitted to any external server, including our own.</p>
+
+  <h2>Permissions</h2>
+  <p>Curate requests exactly two permissions:</p>
+  <ul>
+    <li><code>storage</code> — to save your notes, templates and settings locally in your browser</li>
+    <li>Host access to <code>medium.com</code> and <code>*.medium.com</code> — to display the Curate panel on Medium pages and detect submission fields</li>
+  </ul>
+  <p>Curate does not run on any other website. It does not request access to your tabs, browsing history, downloads or any other browser capability.</p>
+
+  <h2>Page interaction</h2>
+  <p>Curate reads limited information from the Medium page to provide its features:</p>
+  <ul>
+    <li>The submission ID (from the URL or page metadata) to link your note to the right story</li>
+    <li>The writer's name and story title (from visible page text) to fill template placeholders</li>
+    <li>The presence of Medium's note/decline input fields, so the Insert button knows where to place text</li>
+  </ul>
+  <p>Curate never modifies the story content itself. It never reads or stores the body text of any submission. When you click Insert, Curate fills only the specific Medium input field you have open — exactly as if you had typed the text yourself.</p>
+
+  <h2>Isolation</h2>
+  <p>Curate's side panel runs inside a <strong>closed Shadow DOM</strong>. This means:</p>
+  <ul>
+    <li>Medium's page scripts cannot read what you type into Curate</li>
+    <li>Keystrokes entered in the Curate panel are prevented from reaching Medium's keyboard handlers</li>
+    <li>Curate's styles never interfere with Medium's interface</li>
+  </ul>
+
+  <h2>Data syncing</h2>
+  <p>Curate deliberately uses <code>chrome.storage.local</code> instead of <code>chrome.storage.sync</code>. This means your notes do not sync between computers through your Google account. This is a privacy choice: your editorial notes should not travel through any third-party account.</p>
+  <p>To move data between machines, use Curate's Export and Import feature, which saves and loads a JSON file directly on your device.</p>
+
+  <h2>Data deletion</h2>
+  <p>You are in full control of your data at all times:</p>
+  <ul>
+    <li>Delete individual notes from the Curate panel</li>
+    <li>Clear all notes at once from the Manage Templates page</li>
+    <li>Delete individual templates or reset to defaults</li>
+    <li>Uninstall the extension to erase everything permanently</li>
+  </ul>
+
+  <h2>Third parties</h2>
+  <p>Curate has no third-party dependencies, no third-party scripts, no third-party services. The extension is built with plain vanilla JavaScript, has zero npm dependencies, and loads no external code at runtime. There is no third party to share data with because there is no third party involved.</p>
+
+  <h2>Children's privacy</h2>
+  <p>Curate does not collect any personal information from anyone, including children. Since no data is collected or transmitted, there is no data to protect in this regard.</p>
+
+  <h2>Changes to this policy</h2>
+  <p>If this policy changes, the updated version will be published on this page with a new effective date. Since Curate collects nothing, any future change would be a reduction in what little the extension does, not an expansion.</p>
+
+  <h2>Contact</h2>
+  <p>If you have questions about this privacy policy, please open an issue on <a href="https://github.com/wushu75/curate" style="color: var(--green); text-decoration: underline; text-underline-offset: 2px">GitHub</a>.</p>
+
+  <h2>Affiliation</h2>
+  <p>Curate is an independent tool built for publication editors. It is not made by, endorsed by, or affiliated with Medium.</p>
+
+</div>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#191919" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M16.95 7.05a7 7 0 1 0 0 9.9"/><circle cx="19" cy="12" r="1.4" fill="#1a8917" stroke="none"/></svg>
+      <span style="font-family: var(--serif); font-weight: 700; color: var(--black); font-size: 17px">Curate</span>
+      <span>· Zero telemetry · No accounts · No servers</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px">
+      <a href="https://github.com/wushu75/curate" style="color: var(--text-2); text-decoration: none; display: inline-flex; align-items: center; gap: 6px">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        GitHub</a>
+      <span>· An independent tool. Not affiliated with Medium.</span>
+    </div>
+  </div>
+</footer>
+
+<div style="text-align: center; padding: 16px 24px 28px; font-size: 13px; color: var(--text-3)">
+  Designed by <a href="https://tonymomoh.co.uk/" style="color: var(--text-2); text-decoration: underline; text-underline-offset: 2px">tonymomoh</a>, a writer on Medium
+</div>
+
+</body>
+</html>
