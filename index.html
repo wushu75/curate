@@ -2,362 +2,550 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Curate — private notes and kind decline templates for Medium editors</title>
-<script src="./vendor/react.js"></script>
-<script src="./vendor/react-dom.js"></script>
-<script src="./support.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Curate — Private Notes &amp; Decline Templates for Medium Editors</title>
+<meta name="description" content="A privacy-first Chrome extension for Medium publication editors. Private notes on every submission, kind decline templates with one-click insert. 100% local — no accounts, no servers, zero telemetry.">
+<meta name="keywords" content="Medium editor, Medium publication, Chrome extension, decline templates, editorial feedback, private notes, submission review, privacy-first, editorial tools">
+<meta name="author" content="Curate">
+<link rel="canonical" href="https://wushu75.github.io/curate/">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://wushu75.github.io/curate/">
+<meta property="og:title" content="Curate — Private Notes &amp; Decline Templates for Medium Editors">
+<meta property="og:description" content="Private notes and kind, customizable decline templates for Medium publication editors. Everything stays on your device. Nothing to log in to. Nothing to leak.">
+<meta property="og:site_name" content="Curate">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Curate — Private Notes &amp; Decline Templates for Medium Editors">
+<meta name="twitter:description" content="Private notes and kind decline templates for Medium editors. 100% local. No accounts. Zero telemetry.">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Curate",
+  "description": "A privacy-first Chrome extension for Medium publication editors. Private notes on every submission and kind, customizable decline templates with one-click insert.",
+  "url": "https://wushu75.github.io/curate/",
+  "applicationCategory": "BrowserApplication",
+  "operatingSystem": "Chrome, Edge, Brave, Arc",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "installUrl": "https://chromewebstore.google.com/detail/curate/iacamcpominpmepkjlabdedmdbmifffg",
+  "softwareVersion": "1.0.0",
+  "permissions": "storage, medium.com host access",
+  "browserRequirements": "Requires Chrome 110+ or Chromium-based browser"
+}
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+:root {
+  --text: #242424;
+  --text-2: #6b6b6b;
+  --text-3: #8a8a8a;
+  --bg: #ffffff;
+  --bg-soft: #f9f9f9;
+  --border: #f2f2f2;
+  --border-2: #e6e6e6;
+  --black: #191919;
+  --green: #1a8917;
+  --green-soft: #e8f3e8;
+  --serif: 'Source Serif 4', Georgia, serif;
+  --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+body { font-family: var(--sans); color: var(--text); background: var(--bg); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+a { color: var(--text); }
+a:hover { color: #000; }
+img { max-width: 100%; height: auto; }
+.wrap { max-width: 1192px; margin: 0 auto; padding-left: 24px; padding-right: 24px; }
+
+/* Nav */
+.nav { border-bottom: 1px solid var(--border); background: var(--bg); position: sticky; top: 0; z-index: 50; }
+.nav-inner { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px; min-height: 57px; }
+.nav-brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--black); }
+.nav-brand span { font-family: var(--serif); font-size: 26px; font-weight: 700; letter-spacing: -0.03em; }
+.nav-links { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; font-size: 14px; }
+.nav-links a { color: var(--text-2); text-decoration: none; padding: 12px 0; }
+.nav-links a:hover { color: var(--text); }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; padding: 0 18px; border-radius: 999px; background: var(--black); color: #fff; text-decoration: none; font-weight: 500; font-size: 14px; height: 38px; }
+.btn-primary:hover { background: #333; color: #fff; }
+.btn-lg { height: 48px; padding: 0 24px; font-size: 16px; }
+.btn-xl { height: 52px; padding: 0 28px; font-size: 17px; }
+.btn-outline { display: inline-flex; align-items: center; height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid var(--text); color: var(--text); text-decoration: none; font-size: 16px; }
+.btn-outline:hover { background: var(--bg-soft); color: var(--text); }
+
+/* Hero */
+.hero { padding: 72px 0 40px; }
+.hero-kicker { display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2); }
+.hero-kicker .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); }
+.hero h1 { margin-top: 20px; font-family: var(--serif); font-weight: 700; font-size: clamp(64px, 12vw, 168px); line-height: 0.92; letter-spacing: -0.045em; color: var(--black); }
+.hero h1 .accent { color: var(--green); }
+.hero-bar { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 32px; margin-top: 28px; padding-top: 28px; border-top: 1px solid var(--text); }
+.hero-bar p { max-width: 620px; font-family: var(--serif); font-size: clamp(21px, 2.4vw, 26px); line-height: 1.4; }
+.hero-btns { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.stats-row { list-style: none; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-top: 40px; }
+.stats-row li { padding: 20px 0; }
+.stats-row .num { font-family: var(--serif); font-size: 34px; font-weight: 600; letter-spacing: -0.02em; }
+.stats-row .label { font-size: 14px; color: var(--text-2); }
+
+/* Feature story */
+.story { padding: 32px 0 88px; }
+.story-grid { display: flex; flex-wrap: wrap; gap: 56px; align-items: center; }
+.story-text { flex: 1 1 440px; min-width: 0; }
+.story-panel { flex: 1 1 380px; min-width: 0; display: flex; justify-content: center; }
+
+/* Panel preview */
+.panel-card { width: 100%; max-width: 400px; background: #fff; border: 1px solid var(--border); border-radius: 12px; box-shadow: 0 8px 28px rgba(0,0,0,0.15); overflow: hidden; font-size: 14px; }
+.panel-header { display: flex; align-items: center; gap: 10px; padding: 16px 16px 14px 22px; border-bottom: 1px solid var(--border); }
+.panel-body { padding: 18px 22px 22px; display: flex; flex-direction: column; gap: 18px; }
+.section-label { font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-2); }
+
+/* Sections */
+.section { padding: 96px 0; }
+.section-alt { background: var(--bg-soft); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+.section-dark { background: var(--black); color: #fff; }
+.section-head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 1px solid var(--text); padding-bottom: 16px; }
+.section-head h2 { font-family: var(--serif); font-size: clamp(32px, 3.6vw, 44px); letter-spacing: -0.02em; font-weight: 700; }
+
+/* Features list */
+.feature-item { display: flex; flex-wrap: wrap; gap: 16px 40px; padding: 32px 0; border-bottom: 1px solid var(--border-2); }
+.feature-num { flex: 0 0 72px; font-family: var(--serif); font-size: 44px; font-weight: 400; font-style: italic; color: #b3b3b3; }
+.feature-body { flex: 1 1 420px; min-width: 0; }
+.feature-body h3 { margin: 8px 0 0; font-family: var(--serif); font-size: clamp(24px, 2.4vw, 30px); line-height: 1.2; letter-spacing: -0.015em; font-weight: 700; }
+.feature-body p { margin: 10px 0 0; font-family: var(--serif); font-size: 19px; line-height: 1.55; color: #555; max-width: 640px; }
+.feature-tag { flex: 0 0 auto; align-self: center; }
+.tag-pill { font-family: var(--mono); font-size: 12px; border: 1px solid var(--border-2); background: #fff; border-radius: 999px; padding: 4px 12px; }
+
+/* Queue cards */
+.queue-grid { margin-top: 48px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+.queue-card { border: 1px solid var(--border); border-radius: 8px; padding: 28px 26px 24px; background: #fff; box-shadow: 0 1px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 14px; }
+.verdict-stamp { flex: none; transform: rotate(-4deg); border-width: 2px; border-style: solid; border-radius: 6px; padding: 3px 10px; font-family: var(--mono); font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; }
+.private-note { background: #fbf8ec; border-radius: 6px; padding: 12px 14px; font-size: 14px; line-height: 1.5; color: #4a4636; }
+
+/* Process steps */
+.process-grid { margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 40px; }
+.process-step { border-top: 2px solid var(--black); padding-top: 20px; }
+.process-step .step-num { font-family: var(--mono); font-size: 13px; color: var(--text-2); }
+.process-step h3 { margin: 10px 0; font-family: var(--serif); font-size: 24px; font-weight: 700; }
+.process-step p { font-size: 16px; line-height: 1.6; color: #555; }
+
+/* Privacy checklist */
+.privacy-grid { display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start; }
+.privacy-text { flex: 1 1 380px; min-width: 0; }
+.privacy-list { flex: 1 1 440px; min-width: 0; list-style: none; }
+.privacy-item { display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--border-2); }
+.privacy-item:last-child { border-bottom: 0; }
+.check-mark { font-family: var(--mono); font-size: 13px; color: var(--green); padding-top: 3px; }
+
+/* Templates dark section */
+.templates-grid { display: flex; flex-wrap: wrap; gap: 56px; }
+.templates-text { flex: 1 1 340px; min-width: 0; }
+.templates-preview { flex: 1 1 520px; min-width: 0; }
+.template-tabs { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 8px; }
+.tab-btn { min-height: 44px; padding: 0 18px; border-radius: 999px; font-family: inherit; font-size: 14px; cursor: pointer; border: 1px solid; transition: background 0.2s, color 0.2s; }
+.tab-btn.active { border-color: #fff; background: #fff; color: var(--black); font-weight: 500; }
+.tab-btn:not(.active) { border-color: #4d4d4d; background: transparent; color: #e0e0e0; }
+.placeholder-chips { margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px; font-family: var(--mono); font-size: 12px; color: #a8a8a8; }
+.placeholder-chip { border: 1px dashed #4d4d4d; border-radius: 999px; padding: 4px 10px; }
+.letter-preview { background: #fff; color: var(--text); border-radius: 8px; padding: clamp(28px, 4vw, 48px); box-shadow: 0 12px 40px rgba(0,0,0,0.35); }
+
+/* FAQ */
+.faq { max-width: 760px; margin: 0 auto; }
+details { border-bottom: 1px solid var(--border-2); padding: 4px 0; }
+summary { cursor: pointer; padding: 18px 0; font-family: var(--serif); font-size: 21px; font-weight: 600; color: var(--black); }
+details p { margin: 0 0 20px; font-size: 16px; line-height: 1.65; color: #555; }
+
+/* CTA box */
+.cta-box { border: 1px solid var(--text); border-radius: 8px; padding: clamp(32px, 5vw, 64px); display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; align-items: center; }
+.cta-text { flex: 1 1 420px; min-width: 0; }
+.cta-text h2 { font-family: var(--serif); font-size: clamp(36px, 4.4vw, 56px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 700; }
+.cta-actions { flex: 0 1 auto; display: flex; flex-direction: column; gap: 12px; align-items: flex-start; }
+
+/* Footer */
+.footer { border-top: 1px solid var(--border); }
+.footer-inner { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; padding: 32px 0 40px; font-size: 14px; color: var(--text-2); }
+
+@media (max-width: 640px) {
+  .nav-links a:not(.btn-primary) { display: none; }
+  .hero h1 { font-size: 56px; }
+  .feature-num { flex-basis: 100%; font-size: 36px; }
+  .story-grid, .privacy-grid, .templates-grid { flex-direction: column; }
+}
+</style>
 </head>
 <body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-<link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;0,8..60,700;1,8..60,400&amp;family=Geist:wght@400;500;600&amp;family=Geist+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
-<style>
-body{margin:0;background:#ffffff}
-a{color:#242424}
-a:hover{color:#000000}
-</style>
-</helmet>
 
-<div style="font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #242424; background: #ffffff; -webkit-font-smoothing: antialiased">
-
-<!-- ============ Top bar ============ -->
-<header style="border-bottom: 1px solid #f2f2f2; background: #ffffff">
-<nav aria-label="Primary" style="max-width: 1192px; margin: 0 auto; padding: 0 24px; min-height: 57px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px">
-<a href="#top" style="display: flex; align-items: center; gap: 10px; text-decoration: none; color: #191919">
-<svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M16.95 7.05a7 7 0 1 0 0 9.9"></path><circle cx="19" cy="12" r="1.4" fill="{{accent}}" stroke="none"></circle></svg>
-<span style="font-family: 'Source Serif 4', Georgia, serif; font-size: 26px; font-weight: 700; letter-spacing: -0.03em">Curate</span>
-</a>
-<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 4px 24px; font-size: 14px; color: #6b6b6b">
-<a href="#issue" style="color: #6b6b6b; text-decoration: none; padding: 12px 0">In this issue</a>
-<a href="#letters" style="color: #6b6b6b; text-decoration: none; padding: 12px 0">Templates</a>
-<a href="#record" style="color: #6b6b6b; text-decoration: none; padding: 12px 0">Privacy</a>
-<a href="#faq" style="color: #6b6b6b; text-decoration: none; padding: 12px 0">FAQ</a>
-<a href="#install" style="display: inline-flex; align-items: center; height: 38px; padding: 0 18px; border-radius: 999px; background: #191919; color: #ffffff; text-decoration: none; font-weight: 500">Add to Chrome</a>
-</div>
+<!-- Nav -->
+<header class="nav">
+<nav class="wrap nav-inner" aria-label="Primary">
+  <a href="#top" class="nav-brand">
+    <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M16.95 7.05a7 7 0 1 0 0 9.9"/><circle cx="19" cy="12" r="1.4" fill="#1a8917" stroke="none"/></svg>
+    <span>Curate</span>
+  </a>
+  <div class="nav-links">
+    <a href="#issue">Features</a>
+    <a href="#letters">Templates</a>
+    <a href="#record">Privacy</a>
+    <a href="#faq">FAQ</a>
+    <a href="https://chromewebstore.google.com/detail/curate/iacamcpominpmepkjlabdedmdbmifffg" class="btn-primary">Add to Chrome</a>
+  </div>
 </nav>
 </header>
 
-<!-- ============ Masthead ============ -->
-<section id="top" style="max-width: 1192px; margin: 0 auto; padding: 72px 24px 40px">
-<div style="display: flex; align-items: center; gap: 10px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #6b6b6b">
-<span style="width: 8px; height: 8px; border-radius: 50%; background: {{accent}}"></span>
-<span>Vol. 1 · A publication for the people who publish</span>
-</div>
-<h1 style="margin: 20px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; font-size: clamp(64px, 12vw, 168px); line-height: 0.92; letter-spacing: -0.045em; color: #191919">Curate<span style="color: {{accent}}">.</span></h1>
-<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 32px; margin-top: 28px; padding-top: 28px; border-top: 1px solid #242424">
-<p style="margin: 0; max-width: 620px; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(21px, 2.4vw, 26px); line-height: 1.4; color: #242424">Private notes and kind, consistent decline templates for Medium publication editors. Everything stays on your device. Nothing to log in to. Nothing to leak.</p>
-<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
-<a href="#install" style="display: inline-flex; align-items: center; gap: 8px; height: 48px; padding: 0 24px; border-radius: 999px; background: #191919; color: #ffffff; text-decoration: none; font-size: 16px; font-weight: 500">
-<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
-Add to Chrome — free</a>
-<a href="#issue" style="display: inline-flex; align-items: center; height: 48px; padding: 0 22px; border-radius: 999px; border: 1px solid #242424; color: #242424; text-decoration: none; font-size: 16px">Read this issue</a>
-</div>
-</div>
-<ul style="list-style: none; margin: 40px 0 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0; border-top: 1px solid #f2f2f2; border-bottom: 1px solid #f2f2f2">
-<li style="padding: 20px 0"><div style="font-family: 'Source Serif 4', Georgia, serif; font-size: 34px; font-weight: 600; letter-spacing: -0.02em">0</div><div style="font-size: 14px; color: #6b6b6b">servers, accounts or trackers</div></li>
-<li style="padding: 20px 0"><div style="font-family: 'Source Serif 4', Georgia, serif; font-size: 34px; font-weight: 600; letter-spacing: -0.02em">2</div><div style="font-size: 14px; color: #6b6b6b">permissions: storage + medium.com</div></li>
-<li style="padding: 20px 0"><div style="font-family: 'Source Serif 4', Georgia, serif; font-size: 34px; font-weight: 600; letter-spacing: -0.02em">5</div><div style="font-size: 14px; color: #6b6b6b">templates on the desk from day one</div></li>
-<li style="padding: 20px 0"><div style="font-family: 'Source Serif 4', Georgia, serif; font-size: 34px; font-weight: 600; letter-spacing: -0.02em">1 click</div><div style="font-size: 14px; color: #6b6b6b">from template to Medium's field</div></li>
-</ul>
+<!-- Hero -->
+<section id="top" class="wrap hero">
+  <div class="hero-kicker"><span class="dot"></span><span>A quiet companion for the people who publish</span></div>
+  <h1>Curate<span class="accent">.</span></h1>
+  <div class="hero-bar">
+    <p>Private notes and kind, consistent decline templates for Medium publication editors. Everything stays on your device. Nothing to log in to. Nothing to leak.</p>
+    <div class="hero-btns">
+      <a href="https://chromewebstore.google.com/detail/curate/iacamcpominpmepkjlabdedmdbmifffg" class="btn-primary btn-lg">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>
+        Add to Chrome — free</a>
+      <a href="#issue" class="btn-outline">Read more</a>
+    </div>
+  </div>
+  <ul class="stats-row">
+    <li><div class="num">0</div><div class="label">servers, accounts or trackers</div></li>
+    <li><div class="num">2</div><div class="label">permissions: storage + medium.com</div></li>
+    <li><div class="num">5</div><div class="label">templates on the desk from day one</div></li>
+    <li><div class="num">1 click</div><div class="label">from template to Medium's field</div></li>
+  </ul>
 </section>
 
-<!-- ============ Featured story ============ -->
-<section aria-labelledby="feature-title" style="max-width: 1192px; margin: 0 auto; padding: 32px 24px 88px">
-<div style="display: flex; flex-wrap: wrap; gap: 56px; align-items: center">
-<article style="flex: 1 1 440px; min-width: 0">
-<div style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: {{accent}}">
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"></path></svg>
-Editor's pick
-</div>
-<h2 id="feature-title" style="margin: 14px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(36px, 4.4vw, 52px); line-height: 1.08; letter-spacing: -0.025em; font-weight: 700; color: #191919">The kindest no you'll ever send.</h2>
-<p style="margin: 18px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 21px; line-height: 1.55; color: #6b6b6b">Every week you turn down good writers for good reasons. Curate keeps your reasons consistent, your tone warm, and your private thoughts exactly that — private.</p>
-<div style="display: flex; align-items: center; gap: 12px; margin-top: 28px; font-size: 14px; color: #6b6b6b">
-<span style="width: 36px; height: 36px; border-radius: 50%; background: #191919; color: #ffffff; display: inline-flex; align-items: center; justify-content: center">
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M16.95 7.05a7 7 0 1 0 0 9.9"></path></svg>
-</span>
-<div><div style="color: #242424; font-weight: 500">The Curate desk</div><div>3 min read · For editors</div></div>
-</div>
-<div style="margin-top: 36px; font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; line-height: 1.6; color: #242424">
-<p style="margin: 0"><span style="float: left; font-size: 74px; line-height: 0.8; font-weight: 700; padding: 8px 10px 0 0; color: #191919">M</span>edium has said it wants richer, customizable decline reasons — and that open text fields are hard to add because of the risk of harassment. Curate solves the editor's half of that problem without adding a single byte to anyone's servers.</p>
-</div>
-</article>
-
-<!-- Product panel recreation -->
-<div style="flex: 1 1 380px; min-width: 0; display: flex; justify-content: center">
-<div aria-label="Preview of the Curate side panel" style="width: 100%; max-width: 400px; background: #ffffff; border: 1px solid #f2f2f2; border-radius: 12px; box-shadow: rgba(0,0,0,0.15) 0 8px 28px; overflow: hidden; font-size: 14px">
-<div style="display: flex; align-items: center; gap: 10px; padding: 16px 16px 14px 22px; border-bottom: 1px solid #f2f2f2">
-<svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#191919" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M16.95 7.05a7 7 0 1 0 0 9.9"></path><circle cx="19" cy="12" r="1.35" fill="{{accent}}" stroke="none"></circle></svg>
-<span style="font-weight: 600; font-size: 17px; flex: 1">Curate</span>
-<span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: #6b6b6b; background: #f9f9f9; border: 1px solid #f2f2f2; border-radius: 999px; padding: 3px 9px 3px 7px">
-<svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="10.5" width="13" height="9" rx="2"></rect><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path></svg>
-On this device</span>
-</div>
-<div style="padding: 18px 22px 22px; display: flex; flex-direction: column; gap: 18px">
-<div>
-<div style="font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase; color: #6b6b6b">Submission</div>
-<div style="margin-top: 6px; font-weight: 600; font-size: 15.5px">The Quiet Economics of Corner Shops</div>
-<div style="margin-top: 6px; display: flex; gap: 6px; align-items: center; font-size: 12.5px; color: #6b6b6b"><code style="font-family: 'Geist Mono', monospace; font-size: 11px; background: #f9f9f9; border: 1px solid #f2f2f2; border-radius: 6px; padding: 1px 6px; color: #242424">3f9a1c27b0de</code> from URL · A. Rahman</div>
-</div>
-<div>
-<div style="display: flex; justify-content: space-between; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase; color: #6b6b6b"><span>Private note</span><span style="text-transform: none; letter-spacing: 0; color: {{accent}}">✓ Saved</span></div>
-<div style="margin-top: 8px; background: #f9f9f9; border: 1px solid #f2f2f2; border-radius: 8px; padding: 12px 14px; line-height: 1.5; font-size: 14px; white-space: pre-line">Lovely voice. Third section drifts — ask for a tighter ending. Strong candidate for the March issue.</div>
-</div>
-<div>
-<div style="display: flex; justify-content: space-between; font-size: 11.5px; letter-spacing: 0.05em; text-transform: uppercase; color: #6b6b6b"><span>Templates</span><span>5</span></div>
-<div style="margin-top: 10px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: #6b6b6b"><span style="width: 6px; height: 6px; border-radius: 50%; background: {{accent}}"></span>Medium field detected — Insert will fill it.</div>
-<div style="margin-top: 10px; border: 1px solid #e6e6e6; border-radius: 8px; padding: 12px 12px 10px 14px">
-<div style="display: flex; align-items: center; gap: 8px"><span style="font-weight: 600; flex: 1">Needs another pass</span><span style="font-size: 11px; color: #6b6b6b; border: 1px solid #f2f2f2; background: #f9f9f9; border-radius: 999px; padding: 1px 8px">Revise</span></div>
-<div style="margin-top: 6px; font-size: 13px; line-height: 1.5; color: #6b6b6b">Hi Amira, Thanks for sending us "The Quiet Economics of Corner Shops". There's a strong idea here…</div>
-<div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px"><span style="font-size: 12px; color: #6b6b6b">Used 12×</span><span style="display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px 0 10px; border-radius: 999px; background: #191919; color: #ffffff; font-size: 13px; font-weight: 500">
-<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5v9.5m0 0l-3.75-3.75M12 14l3.75-3.75"></path><path d="M4.5 14.5v3A2 2 0 0 0 6.5 19.5h11a2 2 0 0 0 2-2v-3"></path></svg>Insert</span></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
+<!-- Featured story -->
+<section class="wrap story">
+  <div class="story-grid">
+    <article class="story-text">
+      <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 500; color: var(--green)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.9.9-4.3 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.3-4.1 5.9-.9z"/></svg>
+        Editor's pick
+      </div>
+      <h2 style="margin: 14px 0 0; font-family: var(--serif); font-size: clamp(36px, 4.4vw, 52px); line-height: 1.08; letter-spacing: -0.025em; font-weight: 700; color: var(--black)">The kindest no you'll ever send.</h2>
+      <p style="margin: 18px 0 0; font-family: var(--serif); font-size: 21px; line-height: 1.55; color: var(--text-2)">Every week you turn down good writers for good reasons. Curate keeps your reasons consistent, your tone warm, and your private thoughts exactly that — private.</p>
+      <div style="margin-top: 28px; font-family: var(--serif); font-size: 20px; line-height: 1.6">
+        <p><span style="float: left; font-size: 74px; line-height: 0.8; font-weight: 700; padding: 8px 10px 0 0; color: var(--black)">M</span>edium has said it wants richer, customizable decline reasons — and that open text fields are hard to add because of the risk of harassment. Curate solves the editor's half of that problem without adding a single byte to anyone's servers.</p>
+      </div>
+    </article>
+    <div class="story-panel">
+      <div class="panel-card" aria-label="Preview of the Curate side panel">
+        <div class="panel-header">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#191919" stroke-width="1.5" stroke-linecap="round" aria-hidden="true"><path d="M16.95 7.05a7 7 0 1 0 0 9.9"/><circle cx="19" cy="12" r="1.35" fill="#1a8917" stroke="none"/></svg>
+          <span style="font-weight: 600; font-size: 17px; flex: 1">Curate</span>
+          <span style="display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--text-2); background: var(--bg-soft); border: 1px solid var(--border); border-radius: 999px; padding: 3px 9px 3px 7px">
+            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="10.5" width="13" height="9" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+            On this device</span>
+        </div>
+        <div class="panel-body">
+          <div>
+            <div class="section-label">Submission</div>
+            <div style="margin-top: 6px; font-weight: 600; font-size: 15.5px">The Quiet Economics of Corner Shops</div>
+            <div style="margin-top: 6px; display: flex; gap: 6px; align-items: center; font-size: 12.5px; color: var(--text-2)"><code style="font-family: var(--mono); font-size: 11px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 6px; padding: 1px 6px">3f9a1c27b0de</code> from URL · A. Rahman</div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between" class="section-label"><span>Private note</span><span style="text-transform: none; letter-spacing: 0; color: var(--green)">✓ Saved</span></div>
+            <div style="margin-top: 8px; background: var(--bg-soft); border: 1px solid var(--border); border-radius: 8px; padding: 12px 14px; line-height: 1.5">Lovely voice. Third section drifts — ask for a tighter ending. Strong candidate for the March issue.</div>
+          </div>
+          <div>
+            <div style="display: flex; justify-content: space-between" class="section-label"><span>Templates</span><span>5</span></div>
+            <div style="margin-top: 10px; display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text-2)"><span style="width: 6px; height: 6px; border-radius: 50%; background: var(--green)"></span>Medium field detected — Insert will fill it.</div>
+            <div style="margin-top: 10px; border: 1px solid var(--border-2); border-radius: 8px; padding: 12px 12px 10px 14px">
+              <div style="display: flex; align-items: center; gap: 8px"><span style="font-weight: 600; flex: 1">Needs another pass</span><span style="font-size: 11px; color: var(--text-2); border: 1px solid var(--border); background: var(--bg-soft); border-radius: 999px; padding: 1px 8px">Revise</span></div>
+              <div style="margin-top: 6px; font-size: 13px; line-height: 1.5; color: var(--text-2)">Hi Amira, Thanks for sending us "The Quiet Economics of Corner Shops". There's a strong idea here…</div>
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 10px"><span style="font-size: 12px; color: var(--text-2)">Used 12×</span><span class="btn-primary" style="height: 30px; padding: 0 12px; font-size: 13px; gap: 6px">
+                <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5v9.5m0 0l-3.75-3.75M12 14l3.75-3.75"/><path d="M4.5 14.5v3A2 2 0 0 0 6.5 19.5h11a2 2 0 0 0 2-2v-3"/></svg>Insert</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ============ In this issue ============ -->
-<section id="issue" aria-labelledby="issue-title" style="background: #f9f9f9; border-top: 1px solid #f2f2f2; border-bottom: 1px solid #f2f2f2">
-<div style="max-width: 1192px; margin: 0 auto; padding: 88px 24px">
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px; border-bottom: 1px solid #242424; padding-bottom: 16px">
-<h2 id="issue-title" style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(32px, 3.6vw, 44px); letter-spacing: -0.02em; font-weight: 700">In this issue</h2>
-<span style="font-size: 14px; color: #6b6b6b">Five features, carefully selected</span>
-</div>
-<ol style="list-style: none; margin: 0; padding: 0">
-<sc-for list="{{features}}" as="f" hint-placeholder-count="5">
-<li style="display: flex; flex-wrap: wrap; gap: 16px 40px; padding: 32px 0; border-bottom: 1px solid #e6e6e6">
-<div style="flex: 0 0 72px; font-family: 'Source Serif 4', Georgia, serif; font-size: 44px; line-height: 1; font-weight: 400; font-style: italic; color: #b3b3b3">{{f.num}}</div>
-<div style="flex: 1 1 420px; min-width: 0">
-<div style="font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: #6b6b6b">{{f.kicker}}</div>
-<h3 style="margin: 8px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(24px, 2.4vw, 30px); line-height: 1.2; letter-spacing: -0.015em; font-weight: 700; color: #191919">{{f.title}}</h3>
-<p style="margin: 10px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; line-height: 1.55; color: #555555; max-width: 640px">{{f.dek}}</p>
-</div>
-<div style="flex: 0 0 auto; align-self: center; font-size: 13px; color: #6b6b6b; display: flex; align-items: center; gap: 8px">
-<span style="font-family: 'Geist Mono', monospace; font-size: 12px; border: 1px solid #e6e6e6; background: #ffffff; border-radius: 999px; padding: 4px 12px; color: #242424">{{f.tag}}</span>
-</div>
-</li>
-</sc-for>
-</ol>
-</div>
+<!-- In this issue / Features -->
+<section id="issue" class="section-alt">
+  <div class="wrap" style="padding-top: 88px; padding-bottom: 88px">
+    <div class="section-head">
+      <h2>Features</h2>
+      <span style="font-size: 14px; color: var(--text-2)">Five features, carefully selected</span>
+    </div>
+    <ol style="list-style: none">
+      <li class="feature-item">
+        <div class="feature-num">01</div>
+        <div class="feature-body">
+          <div style="font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-2)">Private notes</div>
+          <h3>A margin for every manuscript</h3>
+          <p>Notes tied to each submission ID, saved as you type, synced across your tabs — and a small dot on the button when a story already has your thoughts.</p>
+        </div>
+        <div class="feature-tag"><span class="tag-pill">autosave</span></div>
+      </li>
+      <li class="feature-item">
+        <div class="feature-num">02</div>
+        <div class="feature-body">
+          <div style="font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-2)">Templates</div>
+          <h3>Say no the same kind way, every time</h3>
+          <p>Five professional decline and feedback letters to start. Write your own, sort them by category, drag them into the order you reach for them.</p>
+        </div>
+        <div class="feature-tag"><span class="tag-pill">5 included</span></div>
+      </li>
+      <li class="feature-item">
+        <div class="feature-num">03</div>
+        <div class="feature-body">
+          <div style="font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-2)">One-click insert</div>
+          <h3>From your desk to Medium's field</h3>
+          <p>Curate finds the note or decline field you opened and fills it, React-safe. If there's no field, the letter is copied for you instead.</p>
+        </div>
+        <div class="feature-tag"><span class="tag-pill">clipboard fallback</span></div>
+      </li>
+      <li class="feature-item">
+        <div class="feature-num">04</div>
+        <div class="feature-body">
+          <div style="font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-2)">Smart placeholders</div>
+          <h3>Personal without the retyping</h3>
+          <p>The writer's first name, the story title, your publication and your signature drop in automatically, with graceful fallbacks when a detail is missing.</p>
+        </div>
+        <div class="feature-tag"><span class="tag-pill">{{author}}</span></div>
+      </li>
+      <li class="feature-item" style="border-bottom: 0">
+        <div class="feature-num">05</div>
+        <div class="feature-body">
+          <div style="font-size: 13px; font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-2)">Backup &amp; share</div>
+          <h3>One house style for the whole masthead</h3>
+          <p>Export your templates as JSON and hand them to co-editors so everyone declines with the same care. Import to merge or replace.</p>
+        </div>
+        <div class="feature-tag"><span class="tag-pill">JSON</span></div>
+      </li>
+    </ol>
+  </div>
 </section>
 
-<!-- ============ The queue (curator twist) ============ -->
-<section aria-labelledby="queue-title" style="max-width: 1192px; margin: 0 auto; padding: 96px 24px">
-<div style="max-width: 720px">
-<div style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #6b6b6b">From the slush pile</div>
-<h2 id="queue-title" style="margin: 12px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(32px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 700">Every submission gets a verdict. Every verdict gets a reason.</h2>
-<p style="margin: 16px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; line-height: 1.55; color: #6b6b6b">Your private note sits beside each story. Your decision goes out in words you're proud of.</p>
-</div>
-<div style="margin-top: 48px; display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px">
-<sc-for list="{{queue}}" as="q" hint-placeholder-count="3">
-<article style="position: relative; border: 1px solid #f2f2f2; border-radius: 8px; padding: 28px 26px 24px; background: #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,0.05); display: flex; flex-direction: column; gap: 14px">
-<div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
-<div style="font-size: 13px; color: #6b6b6b">{{q.author}} · {{q.read}}</div>
-<span style="flex: none; transform: rotate(-4deg); border: 2px solid {{q.color}}; color: {{q.color}}; border-radius: 6px; padding: 3px 10px; font-family: 'Geist Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase">{{q.verdict}}</span>
-</div>
-<h3 style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 23px; line-height: 1.25; letter-spacing: -0.01em; font-weight: 700">{{q.title}}</h3>
-<div style="background: #fbf8ec; border-radius: 6px; padding: 12px 14px; font-size: 14px; line-height: 1.5; color: #4a4636">
-<div style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #8a8060; margin-bottom: 4px">Private note</div>{{q.note}}</div>
-<div style="margin-top: auto; padding-top: 12px; border-top: 1px solid #f2f2f2; font-size: 13px; color: #6b6b6b; display: flex; align-items: center; gap: 8px">
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6.5h15v11h-15z"></path><path d="M4.5 7l7.5 6 7.5-6"></path></svg>
-Sent with “{{q.template}}”</div>
-</article>
-</sc-for>
-</div>
+<!-- Queue -->
+<section class="wrap section">
+  <div style="max-width: 720px">
+    <div style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2)">From the slush pile</div>
+    <h2 style="margin: 12px 0 0; font-family: var(--serif); font-size: clamp(32px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 700">Every submission gets a verdict. Every verdict gets a reason.</h2>
+    <p style="margin: 16px 0 0; font-family: var(--serif); font-size: 20px; line-height: 1.55; color: var(--text-2)">Your private note sits beside each story. Your decision goes out in words you're proud of.</p>
+  </div>
+  <div class="queue-grid">
+    <article class="queue-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+        <div style="font-size: 13px; color: var(--text-2)">M. Okafor · 7 min read</div>
+        <span class="verdict-stamp" style="border-color: #1a7a17; color: #1a7a17">Accepted</span>
+      </div>
+      <h3 style="font-family: var(--serif); font-size: 23px; line-height: 1.25; letter-spacing: -0.01em; font-weight: 700">What My Grandmother's Recipe Box Taught Me About Data</h3>
+      <div class="private-note"><div style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #8a8060; margin-bottom: 4px">Private note</div>Perfect for the archives issue. Ask about a header image credit.</div>
+      <div style="margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 8px">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6.5h15v11h-15z"/><path d="M4.5 7l7.5 6 7.5-6"/></svg>
+        Sent with "Welcome aboard"</div>
+    </article>
+    <article class="queue-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+        <div style="font-size: 13px; color: var(--text-2)">L. Brandt · 5 min read</div>
+        <span class="verdict-stamp" style="border-color: #a8650c; color: #a8650c">Revise</span>
+      </div>
+      <h3 style="font-family: var(--serif); font-size: 23px; line-height: 1.25; letter-spacing: -0.01em; font-weight: 700">The Case for Boring Software</h3>
+      <div class="private-note"><div style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #8a8060; margin-bottom: 4px">Private note</div>Great thesis, ending trails off. Needs two concrete examples.</div>
+      <div style="margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 8px">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6.5h15v11h-15z"/><path d="M4.5 7l7.5 6 7.5-6"/></svg>
+        Sent with "Needs another pass"</div>
+    </article>
+    <article class="queue-card">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 12px">
+        <div style="font-size: 13px; color: var(--text-2)">R. Silva · 4 min read</div>
+        <span class="verdict-stamp" style="border-color: #b33a3a; color: #b33a3a">Declined</span>
+      </div>
+      <h3 style="font-family: var(--serif); font-size: 23px; line-height: 1.25; letter-spacing: -0.01em; font-weight: 700">Ten Prompts That Will Change Your Life</h3>
+      <div class="private-note"><div style="font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #8a8060; margin-bottom: 4px">Private note</div>Not our beat. Reads as listicle — kind decline, invite future pitches.</div>
+      <div style="margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border); font-size: 13px; color: var(--text-2); display: flex; align-items: center; gap: 8px">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 6.5h15v11h-15z"/><path d="M4.5 7l7.5 6 7.5-6"/></svg>
+        Sent with "Off-topic"</div>
+    </article>
+  </div>
 </section>
 
-<!-- ============ Letters (interactive template switcher) ============ -->
-<section id="letters" aria-labelledby="letters-title" style="background: #191919; color: #ffffff">
-<div style="max-width: 1192px; margin: 0 auto; padding: 96px 24px; display: flex; flex-wrap: wrap; gap: 56px">
-<div style="flex: 1 1 340px; min-width: 0">
-<div style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #a8a8a8">Letters to the writer</div>
-<h2 id="letters-title" style="margin: 12px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(32px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 700; color: #ffffff">Five drafts on the desk. Edit them into your own voice.</h2>
-<p style="margin: 16px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; line-height: 1.55; color: #c4c4c4">Placeholders fill themselves — the writer's name, the story title, your publication and your signature.</p>
-<div role="group" aria-label="Choose a template" style="margin-top: 32px; display: flex; flex-wrap: wrap; gap: 8px">
-<sc-for list="{{letters}}" as="l" hint-placeholder-count="5">
-<sc-if value="{{l.selected}}" hint-placeholder-val="{{false}}">
-<button type="button" aria-pressed="true" onClick="{{l.pick}}" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid #ffffff; background: #ffffff; color: #191919; font-family: inherit; font-size: 14px; font-weight: 500; cursor: pointer">{{l.name}}</button>
-</sc-if>
-<sc-if value="{{l.unselected}}" hint-placeholder-val="{{true}}">
-<button type="button" aria-pressed="false" onClick="{{l.pick}}" style="min-height: 44px; padding: 0 18px; border-radius: 999px; border: 1px solid #4d4d4d; background: transparent; color: #e0e0e0; font-family: inherit; font-size: 14px; cursor: pointer">{{l.name}}</button>
-</sc-if>
-</sc-for>
-</div>
-<div style="margin-top: 28px; display: flex; flex-wrap: wrap; gap: 8px; font-family: 'Geist Mono', monospace; font-size: 12px; color: #a8a8a8">
-<span style="border: 1px dashed #4d4d4d; border-radius: 999px; padding: 4px 10px">{{author}}</span>
-<span style="border: 1px dashed #4d4d4d; border-radius: 999px; padding: 4px 10px">{{title}}</span>
-<span style="border: 1px dashed #4d4d4d; border-radius: 999px; padding: 4px 10px">{{publication}}</span>
-<span style="border: 1px dashed #4d4d4d; border-radius: 999px; padding: 4px 10px">{{editor}}</span>
-<span style="border: 1px dashed #4d4d4d; border-radius: 999px; padding: 4px 10px">{{date}}</span>
-</div>
-</div>
-<div style="flex: 1 1 520px; min-width: 0">
-<div style="background: #ffffff; color: #242424; border-radius: 8px; padding: clamp(28px, 4vw, 48px); box-shadow: 0 12px 40px rgba(0,0,0,0.35)">
-<div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid #f2f2f2; font-size: 13px; color: #6b6b6b">
-<span>To: Jordan · Re: “The Art of Slow Mornings”</span>
-<span style="font-family: 'Geist Mono', monospace; font-size: 11.5px; border: 1px solid #e6e6e6; border-radius: 999px; padding: 2px 10px">{{current.tag}}</span>
-</div>
-<p style="margin: 22px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 19px; line-height: 1.65; white-space: pre-line; color: #242424">{{current.body}}</p>
-</div>
-</div>
-</div>
+<!-- Templates (dark section) -->
+<section id="letters" class="section-dark">
+  <div class="wrap templates-grid" style="padding-top: 96px; padding-bottom: 96px">
+    <div class="templates-text">
+      <div style="font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #a8a8a8">Letters to the writer</div>
+      <h2 style="margin: 12px 0 0; font-family: var(--serif); font-size: clamp(32px, 3.6vw, 44px); line-height: 1.1; letter-spacing: -0.02em; font-weight: 700">Five drafts on the desk. Edit them into your own voice.</h2>
+      <p style="margin: 16px 0 0; font-family: var(--serif); font-size: 19px; line-height: 1.55; color: #c4c4c4">Placeholders fill themselves — the writer's name, the story title, your publication and your signature.</p>
+      <div class="template-tabs" role="group" aria-label="Choose a template">
+        <button type="button" class="tab-btn active" data-template="great">Great, not right now</button>
+        <button type="button" class="tab-btn" data-template="revise">Needs another pass</button>
+        <button type="button" class="tab-btn" data-template="offtopic">Off-topic</button>
+        <button type="button" class="tab-btn" data-template="ai">AI concerns</button>
+        <button type="button" class="tab-btn" data-template="format">Formatting &amp; sources</button>
+      </div>
+      <div class="placeholder-chips">
+        <span class="placeholder-chip">{{author}}</span>
+        <span class="placeholder-chip">{{title}}</span>
+        <span class="placeholder-chip">{{publication}}</span>
+        <span class="placeholder-chip">{{editor}}</span>
+        <span class="placeholder-chip">{{date}}</span>
+      </div>
+    </div>
+    <div class="templates-preview">
+      <div class="letter-preview">
+        <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-bottom: 16px; border-bottom: 1px solid var(--border); font-size: 13px; color: var(--text-2)">
+          <span>To: Jordan · Re: "The Art of Slow Mornings"</span>
+          <span id="letter-tag" style="font-family: var(--mono); font-size: 11.5px; border: 1px solid var(--border-2); border-radius: 999px; padding: 2px 10px">Timing</span>
+        </div>
+        <p id="letter-body" style="margin: 22px 0 0; font-family: var(--serif); font-size: 19px; line-height: 1.65; white-space: pre-line">Hi Jordan,
+
+We genuinely enjoyed "The Art of Slow Mornings" — thank you for sending it to The Quiet Desk.
+
+Unfortunately our schedule is full for the coming weeks, and we've recently published pieces on a similar subject, so we can't take it right now.
+
+Please don't read this as a no to your writing. We'd love to see more from you in the future.
+
+Warmly,
+Sam — Editor, The Quiet Desk</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<!-- ============ How it works ============ -->
-<section aria-labelledby="process-title" style="max-width: 1192px; margin: 0 auto; padding: 96px 24px">
-<h2 id="process-title" style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(32px, 3.6vw, 44px); letter-spacing: -0.02em; font-weight: 700">The editorial process, in three moves</h2>
-<div style="margin-top: 40px; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 40px">
-<div style="border-top: 2px solid #191919; padding-top: 20px">
-<div style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #6b6b6b">01 — Read</div>
-<h3 style="margin: 10px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 24px; font-weight: 700">Open the submission</h3>
-<p style="margin: 10px 0 0; font-size: 16px; line-height: 1.6; color: #555555">A small button waits in the corner of medium.com. Curate recognises the story you're reviewing from its ID — on drafts, stories and your publication's inbox.</p>
-</div>
-<div style="border-top: 2px solid #191919; padding-top: 20px">
-<div style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #6b6b6b">02 — Annotate</div>
-<h3 style="margin: 10px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 24px; font-weight: 700">Think out loud, privately</h3>
-<p style="margin: 10px 0 0; font-size: 16px; line-height: 1.6; color: #555555">Jot your thoughts in the side panel. They save as you type and come back whenever you reopen that submission. Press Alt+Shift+C from anywhere on Medium.</p>
-</div>
-<div style="border-top: 2px solid #191919; padding-top: 20px">
-<div style="font-family: 'Geist Mono', monospace; font-size: 13px; color: #6b6b6b">03 — Respond</div>
-<h3 style="margin: 10px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 24px; font-weight: 700">Insert, review, send</h3>
-<p style="margin: 10px 0 0; font-size: 16px; line-height: 1.6; color: #555555">Open Medium's note field and click Insert. The letter drops in, personalised. No field open? It's copied, ready to paste.</p>
-</div>
-</div>
+<!-- How it works -->
+<section class="wrap section">
+  <h2 style="font-family: var(--serif); font-size: clamp(32px, 3.6vw, 44px); letter-spacing: -0.02em; font-weight: 700">The editorial process, in three moves</h2>
+  <div class="process-grid">
+    <div class="process-step">
+      <div class="step-num">01 — Read</div>
+      <h3>Open the submission</h3>
+      <p>A small button waits in the corner of medium.com. Curate recognises the story you're reviewing from its ID — on drafts, stories and your publication's inbox.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">02 — Annotate</div>
+      <h3>Think out loud, privately</h3>
+      <p>Jot your thoughts in the side panel. They save as you type and come back whenever you reopen that submission. Press Alt+Shift+C from anywhere on Medium.</p>
+    </div>
+    <div class="process-step">
+      <div class="step-num">03 — Respond</div>
+      <h3>Insert, review, send</h3>
+      <p>Open Medium's note field and click Insert. The letter drops in, personalised. No field open? It's copied, ready to paste.</p>
+    </div>
+  </div>
 </section>
 
-<!-- ============ Off the record (privacy) ============ -->
-<section id="record" aria-labelledby="record-title" style="border-top: 1px solid #f2f2f2; border-bottom: 1px solid #f2f2f2; background: #f9f9f9">
-<div style="max-width: 1192px; margin: 0 auto; padding: 96px 24px; display: flex; flex-wrap: wrap; gap: 56px; align-items: flex-start">
-<div style="flex: 1 1 380px; min-width: 0">
-<div style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: #6b6b6b">
-<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="10.5" width="13" height="9" rx="2"></rect><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"></path></svg>
-Privacy policy, in full</div>
-<h2 id="record-title" style="margin: 12px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(48px, 6vw, 80px); line-height: 0.98; letter-spacing: -0.035em; font-weight: 700">Strictly off the record.</h2>
-<p style="margin: 20px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 21px; line-height: 1.55; color: #555555; max-width: 520px">An editor's notes are confidential by tradition. Curate keeps them that way by never having them to begin with.</p>
-</div>
-<ul style="flex: 1 1 440px; min-width: 0; list-style: none; margin: 0; padding: 0; display: grid; gap: 0">
-<li style="display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid #e6e6e6"><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: {{accent}}; padding-top: 3px">✓</span><div><div style="font-weight: 600; font-size: 17px">Stored in your browser only</div><div style="margin-top: 4px; color: #6b6b6b; font-size: 15px; line-height: 1.55">Notes, templates and settings live in chrome.storage.local on this device.</div></div></li>
-<li style="display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid #e6e6e6"><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: {{accent}}; padding-top: 3px">✓</span><div><div style="font-weight: 600; font-size: 17px">No network requests</div><div style="margin-top: 4px; color: #6b6b6b; font-size: 15px; line-height: 1.55">No servers, no analytics, no remote code. Nothing to breach.</div></div></li>
-<li style="display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid #e6e6e6"><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: {{accent}}; padding-top: 3px">✓</span><div><div style="font-weight: 600; font-size: 17px">Sealed off from the page</div><div style="margin-top: 4px; color: #6b6b6b; font-size: 15px; line-height: 1.55">The panel runs in a closed Shadow DOM that Medium's scripts can't read.</div></div></li>
-<li style="display: flex; gap: 16px; padding: 20px 0; border-bottom: 1px solid #e6e6e6"><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: {{accent}}; padding-top: 3px">✓</span><div><div style="font-weight: 600; font-size: 17px">Two permissions, nothing more</div><div style="margin-top: 4px; color: #6b6b6b; font-size: 15px; line-height: 1.55">Storage, and access to medium.com. It doesn't run anywhere else.</div></div></li>
-<li style="display: flex; gap: 16px; padding: 20px 0"><span style="font-family: 'Geist Mono', monospace; font-size: 13px; color: {{accent}}; padding-top: 3px">✓</span><div><div style="font-weight: 600; font-size: 17px">Yours to export or erase</div><div style="margin-top: 4px; color: #6b6b6b; font-size: 15px; line-height: 1.55">Back up as JSON, share templates with co-editors, or delete everything in a click.</div></div></li>
-</ul>
-</div>
+<!-- Privacy -->
+<section id="record" class="section-alt">
+  <div class="wrap privacy-grid" style="padding-top: 96px; padding-bottom: 96px">
+    <div class="privacy-text">
+      <div style="display: inline-flex; align-items: center; gap: 8px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-2)">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.5" y="10.5" width="13" height="9" rx="2"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>
+        Privacy policy, in full</div>
+      <h2 style="margin: 12px 0 0; font-family: var(--serif); font-size: clamp(48px, 6vw, 80px); line-height: 0.98; letter-spacing: -0.035em; font-weight: 700">Strictly off the record.</h2>
+      <p style="margin: 20px 0 0; font-family: var(--serif); font-size: 21px; line-height: 1.55; color: #555; max-width: 520px">An editor's notes are confidential by tradition. Curate keeps them that way by never having them to begin with.</p>
+    </div>
+    <ul class="privacy-list">
+      <li class="privacy-item"><span class="check-mark">✓</span><div><div style="font-weight: 600; font-size: 17px">Stored in your browser only</div><div style="margin-top: 4px; color: var(--text-2); font-size: 15px; line-height: 1.55">Notes, templates and settings live in chrome.storage.local on this device.</div></div></li>
+      <li class="privacy-item"><span class="check-mark">✓</span><div><div style="font-weight: 600; font-size: 17px">No network requests</div><div style="margin-top: 4px; color: var(--text-2); font-size: 15px; line-height: 1.55">No servers, no analytics, no remote code. Nothing to breach.</div></div></li>
+      <li class="privacy-item"><span class="check-mark">✓</span><div><div style="font-weight: 600; font-size: 17px">Sealed off from the page</div><div style="margin-top: 4px; color: var(--text-2); font-size: 15px; line-height: 1.55">The panel runs in a closed Shadow DOM that Medium's scripts can't read.</div></div></li>
+      <li class="privacy-item"><span class="check-mark">✓</span><div><div style="font-weight: 600; font-size: 17px">Two permissions, nothing more</div><div style="margin-top: 4px; color: var(--text-2); font-size: 15px; line-height: 1.55">Storage, and access to medium.com. It doesn't run anywhere else.</div></div></li>
+      <li class="privacy-item"><span class="check-mark">✓</span><div><div style="font-weight: 600; font-size: 17px">Yours to export or erase</div><div style="margin-top: 4px; color: var(--text-2); font-size: 15px; line-height: 1.55">Back up as JSON, share templates with co-editors, or delete everything in a click.</div></div></li>
+    </ul>
+  </div>
 </section>
 
-<!-- ============ FAQ ============ -->
-<section id="faq" aria-labelledby="faq-title" style="max-width: 760px; margin: 0 auto; padding: 96px 24px 72px">
-<h2 id="faq-title" style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(32px, 3.6vw, 44px); letter-spacing: -0.02em; font-weight: 700">Letters to the editor</h2>
-<div style="margin-top: 32px; display: flex; flex-direction: column">
-<sc-for list="{{faq}}" as="item" hint-placeholder-count="4">
-<details style="border-bottom: 1px solid #e6e6e6; padding: 4px 0">
-<summary style="cursor: pointer; padding: 18px 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 21px; font-weight: 600; color: #191919">{{item.q}}</summary>
-<p style="margin: 0 0 20px; font-size: 16px; line-height: 1.65; color: #555555">{{item.a}}</p>
-</details>
-</sc-for>
-</div>
+<!-- FAQ -->
+<section id="faq" class="section">
+  <div class="wrap faq">
+    <h2 style="font-family: var(--serif); font-size: clamp(32px, 3.6vw, 44px); letter-spacing: -0.02em; font-weight: 700">Letters to the editor</h2>
+    <div style="margin-top: 32px">
+      <details>
+        <summary>Does Medium see my notes?</summary>
+        <p>No. Notes never leave your browser. Only the template text you choose to insert is placed into Medium's field — exactly as if you had typed it yourself.</p>
+      </details>
+      <details>
+        <summary>Do notes sync between my computers?</summary>
+        <p>Not in this version, deliberately: syncing would route your notes through an account. Use Export and Import to move them between machines.</p>
+      </details>
+      <details>
+        <summary>What happens when Medium changes its design?</summary>
+        <p>Notes and templates keep working. If Curate can't find Medium's field, Insert falls back to copying the letter so you can paste it.</p>
+      </details>
+      <details>
+        <summary>Is Curate made by Medium?</summary>
+        <p>No. Curate is an independent tool built for publication editors and is not affiliated with Medium.</p>
+      </details>
+    </div>
+  </div>
 </section>
 
-<!-- ============ Install CTA ============ -->
-<section id="install" aria-labelledby="install-title" style="max-width: 1192px; margin: 0 auto; padding: 24px 24px 96px">
-<div style="border: 1px solid #242424; border-radius: 8px; padding: clamp(32px, 5vw, 64px); display: flex; flex-wrap: wrap; gap: 40px; justify-content: space-between; align-items: center">
-<div style="flex: 1 1 420px; min-width: 0">
-<h2 id="install-title" style="margin: 0; font-family: 'Source Serif 4', Georgia, serif; font-size: clamp(36px, 4.4vw, 56px); line-height: 1.04; letter-spacing: -0.03em; font-weight: 700">Join the masthead.</h2>
-<p style="margin: 14px 0 0; font-family: 'Source Serif 4', Georgia, serif; font-size: 20px; line-height: 1.55; color: #6b6b6b">Free for every editor. Works in Chrome, Edge, Brave and Arc.</p>
-</div>
-<div style="flex: 0 1 auto; display: flex; flex-direction: column; gap: 12px; align-items: flex-start">
-<a href="[CHROME WEB STORE LINK]" style="display: inline-flex; align-items: center; gap: 10px; height: 52px; padding: 0 28px; border-radius: 999px; background: #191919; color: #ffffff; text-decoration: none; font-size: 17px; font-weight: 500">
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5v10m0 0l-4-4m4 4l4-4"></path><path d="M4.5 15v2.5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V15"></path></svg>
-Add to Chrome — free</a>
-<span style="font-size: 13px; color: #6b6b6b">No account. No sign-up. Installs in seconds.</span>
-</div>
-</div>
+<!-- Install CTA -->
+<section id="install" class="wrap" style="padding: 24px 24px 96px">
+  <div class="cta-box">
+    <div class="cta-text">
+      <h2>Join the masthead.</h2>
+      <p style="margin: 14px 0 0; font-family: var(--serif); font-size: 20px; line-height: 1.55; color: var(--text-2)">Free for every editor. Works in Chrome, Edge, Brave and Arc.</p>
+    </div>
+    <div class="cta-actions">
+      <a href="https://chromewebstore.google.com/detail/curate/iacamcpominpmepkjlabdedmdbmifffg" class="btn-primary btn-xl">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5v10m0 0l-4-4m4 4l4-4"/><path d="M4.5 15v2.5a2 2 0 0 0 2 2h11a2 2 0 0 0 2-2V15"/></svg>
+        Add to Chrome — free</a>
+      <span style="font-size: 13px; color: var(--text-2)">No account. No sign-up. Installs in seconds.</span>
+    </div>
+  </div>
 </section>
 
-<!-- ============ Footer ============ -->
-<footer style="border-top: 1px solid #f2f2f2">
-<div style="max-width: 1192px; margin: 0 auto; padding: 32px 24px 40px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; font-size: 14px; color: #6b6b6b">
-<div style="display: flex; align-items: center; gap: 8px">
-<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#191919" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M16.95 7.05a7 7 0 1 0 0 9.9"></path><circle cx="19" cy="12" r="1.4" fill="{{accent}}" stroke="none"></circle></svg>
-<span style="font-family: 'Source Serif 4', Georgia, serif; font-weight: 700; color: #191919; font-size: 17px">Curate</span>
-<span>· Zero telemetry · No accounts · No servers</span>
-</div>
-<div>An independent tool. Not affiliated with Medium.</div>
-</div>
+<!-- Footer -->
+<footer class="footer">
+  <div class="wrap footer-inner">
+    <div style="display: flex; align-items: center; gap: 8px">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="#191919" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M16.95 7.05a7 7 0 1 0 0 9.9"/><circle cx="19" cy="12" r="1.4" fill="#1a8917" stroke="none"/></svg>
+      <span style="font-family: var(--serif); font-weight: 700; color: var(--black); font-size: 17px">Curate</span>
+      <span>· Zero telemetry · No accounts · No servers</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 16px">
+      <a href="https://github.com/wushu75/curate" style="color: var(--text-2); text-decoration: none; display: inline-flex; align-items: center; gap: 6px">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.009-.866-.013-1.7-2.782.604-3.369-1.34-3.369-1.34-.454-1.156-1.11-1.463-1.11-1.463-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.025A9.578 9.578 0 0112 6.836a9.59 9.59 0 012.504.337c1.909-1.294 2.747-1.025 2.747-1.025.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.743 0 .267.18.578.688.48C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/></svg>
+        GitHub</a>
+      <span>· An independent tool. Not affiliated with Medium.</span>
+    </div>
+  </div>
 </footer>
 
-</div>
-</x-dc>
-<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#1a8917","options":["#1a8917","#191919","#b4532a","#2b5fb4"]},"$preview":{"width":1440,"height":6200}}'>
-class Component extends DCLogic {
-  constructor(props) {
-    super(props);
-    this.state = { picked: 'great' };
-  }
+<script>
+// Template switcher
+(function() {
+  var sign = '\n\nWarmly,\nSam — Editor, The Quiet Desk';
+  var templates = {
+    great: { tag: 'Timing', body: 'Hi Jordan,\n\nWe genuinely enjoyed “The Art of Slow Mornings” — thank you for sending it to The Quiet Desk.\n\nUnfortunately our schedule is full for the coming weeks, and we’ve recently published pieces on a similar subject, so we can’t take it right now.\n\nPlease don’t read this as a no to your writing. We’d love to see more from you in the future.' + sign },
+    revise: { tag: 'Revise', body: 'Hi Jordan,\n\nThanks for sending us “The Art of Slow Mornings”. There’s a strong idea here, but it isn’t quite ready yet. Three changes would make the biggest difference:\n\n• Bring the main point into the first few paragraphs\n• Support key claims with examples or linked sources\n• A final proofread for clarity and flow\n\nYou’re very welcome to revise and resubmit.' + sign },
+    offtopic: { tag: 'Fit', body: 'Hi Jordan,\n\nThank you for submitting “The Art of Slow Mornings” to The Quiet Desk.\n\nAfter reading it, we’ve decided it isn’t the right fit. Our focus is fairly specific, and this piece sits outside what our readers come to us for. This isn’t a judgement on the quality of your writing.\n\nWe’d be glad to see future submissions that match our focus.' + sign },
+    ai: { tag: 'Policy', body: 'Hi Jordan,\n\nThank you for submitting “The Art of Slow Mornings”.\n\nOur guidelines ask that submissions be primarily the writer’s own work, with any AI assistance clearly disclosed. Parts of this draft read as though they may have been substantially AI-generated, so we can’t accept it as it stands.\n\nIf we’ve got this wrong, we apologise. You’re welcome to revise in your own voice and resubmit with a clear disclosure.' + sign },
+    format: { tag: 'Revise', body: 'Hi Jordan,\n\nThanks for submitting “The Art of Slow Mornings”. Before we can consider it, it needs a little formatting and sourcing work:\n\n• A clear title and short subtitle\n• Credits for every image you use\n• Links to the source of any statistic or quote\n\nOnce these are addressed, please resubmit.' + sign }
+  };
 
-  renderVals() {
-    var accent = this.props.accent ?? '#1a8917';
-    var self = this;
-    var sign = '\n\nWarmly,\nSam — Editor, The Quiet Desk';
+  var buttons = document.querySelectorAll('.tab-btn');
+  var bodyEl = document.getElementById('letter-body');
+  var tagEl = document.getElementById('letter-tag');
 
-    var letterData = [
-      { id: 'great', name: 'Great, not right now', tag: 'Timing',
-        body: 'Hi Jordan,\n\nWe genuinely enjoyed “The Art of Slow Mornings” — thank you for sending it to The Quiet Desk.\n\nUnfortunately our schedule is full for the coming weeks, and we’ve recently published pieces on a similar subject, so we can’t take it right now.\n\nPlease don’t read this as a no to your writing. We’d love to see more from you in the future.' + sign },
-      { id: 'revise', name: 'Needs another pass', tag: 'Revise',
-        body: 'Hi Jordan,\n\nThanks for sending us “The Art of Slow Mornings”. There’s a strong idea here, but it isn’t quite ready yet. Three changes would make the biggest difference:\n\n• Bring the main point into the first few paragraphs\n• Support key claims with examples or linked sources\n• A final proofread for clarity and flow\n\nYou’re very welcome to revise and resubmit.' + sign },
-      { id: 'offtopic', name: 'Off-topic', tag: 'Fit',
-        body: 'Hi Jordan,\n\nThank you for submitting “The Art of Slow Mornings” to The Quiet Desk.\n\nAfter reading it, we’ve decided it isn’t the right fit. Our focus is fairly specific, and this piece sits outside what our readers come to us for. This isn’t a judgement on the quality of your writing.\n\nWe’d be glad to see future submissions that match our focus.' + sign },
-      { id: 'ai', name: 'AI concerns', tag: 'Policy',
-        body: 'Hi Jordan,\n\nThank you for submitting “The Art of Slow Mornings”.\n\nOur guidelines ask that submissions be primarily the writer’s own work, with any AI assistance clearly disclosed. Parts of this draft read as though they may have been substantially AI-generated, so we can’t accept it as it stands.\n\nIf we’ve got this wrong, we apologise. You’re welcome to revise in your own voice and resubmit with a clear disclosure.' + sign },
-      { id: 'format', name: 'Formatting & sources', tag: 'Revise',
-        body: 'Hi Jordan,\n\nThanks for submitting “The Art of Slow Mornings”. Before we can consider it, it needs a little formatting and sourcing work:\n\n• A clear title and short subtitle\n• Credits for every image you use\n• Links to the source of any statistic or quote\n\nOnce these are addressed, please resubmit.' + sign }
-    ];
-
-    var picked = this.state.picked;
-    var letters = letterData.map(function (l) {
-      return {
-        id: l.id, name: l.name, tag: l.tag, body: l.body,
-        selected: l.id === picked,
-        unselected: l.id !== picked,
-        pick: function () { self.setState({ picked: l.id }); }
-      };
+  buttons.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = btn.getAttribute('data-template');
+      var t = templates[key];
+      if (!t) return;
+      buttons.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      bodyEl.textContent = t.body;
+      tagEl.textContent = t.tag;
     });
-    var current = letters.filter(function (l) { return l.selected; })[0] || letters[0];
-
-    return {
-      accent: accent,
-      letters: letters,
-      current: current,
-      author: '{{author}}',
-      title: '{{title}}',
-      publication: '{{publication}}',
-      editor: '{{editor}}',
-      date: '{{date}}',
-      features: [
-        { num: '01', kicker: 'Private notes', title: 'A margin for every manuscript', dek: 'Notes tied to each submission ID, saved as you type, synced across your tabs — and a small dot on the button when a story already has your thoughts.', tag: 'autosave' },
-        { num: '02', kicker: 'Templates', title: 'Say no the same kind way, every time', dek: 'Five professional decline and feedback letters to start. Write your own, sort them by category, drag them into the order you reach for them.', tag: '5 included' },
-        { num: '03', kicker: 'One-click insert', title: 'From your desk to Medium’s field', dek: 'Curate finds the note or decline field you opened and fills it, React-safe. If there’s no field, the letter is copied for you instead.', tag: 'clipboard fallback' },
-        { num: '04', kicker: 'Smart placeholders', title: 'Personal without the retyping', dek: 'The writer’s first name, the story title, your publication and your signature drop in automatically, with graceful fallbacks when a detail is missing.', tag: '{{author}}' },
-        { num: '05', kicker: 'Backup & share', title: 'One house style for the whole masthead', dek: 'Export your templates as JSON and hand them to co-editors so everyone declines with the same care. Import to merge or replace.', tag: 'JSON' }
-      ],
-      queue: [
-        { author: 'M. Okafor', read: '7 min read', verdict: 'Accepted', color: '#1a7a17', title: 'What My Grandmother’s Recipe Box Taught Me About Data', note: 'Perfect for the archives issue. Ask about a header image credit.', template: 'Welcome aboard' },
-        { author: 'L. Brandt', read: '5 min read', verdict: 'Revise', color: '#a8650c', title: 'The Case for Boring Software', note: 'Great thesis, ending trails off. Needs two concrete examples.', template: 'Needs another pass' },
-        { author: 'R. Silva', read: '4 min read', verdict: 'Declined', color: '#b33a3a', title: 'Ten Prompts That Will Change Your Life', note: 'Not our beat. Reads as listicle — kind decline, invite future pitches.', template: 'Off-topic' }
-      ],
-      faq: [
-        { q: 'Does Medium see my notes?', a: 'No. Notes never leave your browser. Only the template text you choose to insert is placed into Medium’s field — exactly as if you had typed it yourself.' },
-        { q: 'Do notes sync between my computers?', a: 'Not in this version, deliberately: syncing would route your notes through an account. Use Export and Import to move them between machines.' },
-        { q: 'What happens when Medium changes its design?', a: 'Notes and templates keep working. If Curate can’t find Medium’s field, Insert falls back to copying the letter so you can paste it.' },
-        { q: 'Is Curate made by Medium?', a: 'No. Curate is an independent tool built for publication editors and is not affiliated with Medium.' }
-      ]
-    };
-  }
-}
+  });
+})();
 </script>
+
 </body>
 </html>
